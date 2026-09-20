@@ -1,15 +1,28 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import { SimpleSlug } from "./quartz/util/path"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    // Home only: surface the latest notes so readers don't have to open the Notas folder first.
+    Component.ConditionalRender({
+      component: Component.RecentNotes({
+        title: "Notas recientes",
+        limit: 5,
+        showTags: false,
+        linkToMore: "notas/" as SimpleSlug,
+        filter: (f) => f.slug?.startsWith("notas/") === true && f.slug !== "notas/index",
+      }),
+      condition: (page) => page.fileData.slug === "index",
+    }),
+  ],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
+      GitHub: "https://github.com/SrRubencho",
+      X: "https://x.com/SrRubencho",
     },
   }),
 }
@@ -22,7 +35,11 @@ export const defaultContentPageLayout: PageLayout = {
       condition: (page) => page.fileData.slug !== "index",
     }),
     Component.ArticleTitle(),
-    Component.ContentMeta(),
+    // Date and reading time make no sense on the landing page.
+    Component.ConditionalRender({
+      component: Component.ContentMeta(),
+      condition: (page) => page.fileData.slug !== "index",
+    }),
     Component.TagList(),
   ],
   left: [
