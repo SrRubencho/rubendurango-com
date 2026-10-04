@@ -2,6 +2,8 @@
 title: Rubén Durango
 ---
 
+<img class="home-portrait" src="images/rubencho-voxel.webp" alt="Rubencho en versión voxel: pelo crespo y gafas negras" width="128" height="128">
+
 Soy Rubén Durango (**Rubencho**). Trabajo en IA aplicada para la industria latinoamericana, en camino hacia un rol de arquitecto de IA.
 
 Esto es un *jardín digital*: notas en construcción, no artículos pulidos. Escribo sobre lo que hago y por qué lo hago: sistemas, decisiones de arquitectura, herramientas, y los problemas reales de aplicar IA en contextos industriales.
