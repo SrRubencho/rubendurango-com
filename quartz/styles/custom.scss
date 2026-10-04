@@ -1,3 +1,22 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+// Home only: small voxel portrait (ADR-0011) floated beside the intro, not a hero banner.
+// The disc keeps the dark hair readable on the dark-mode background.
+.home-portrait {
+  float: right;
+  width: 128px;
+  height: 128px;
+  margin: 0 0 1rem 1.5rem;
+  padding: 6px;
+  border-radius: 50%;
+  background: var(--lightgray);
+  box-sizing: border-box;
+
+  @media all and (max-width: 800px) {
+    width: 96px;
+    height: 96px;
+    margin-left: 1rem;
+  }
+}
