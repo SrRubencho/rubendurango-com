@@ -40,8 +40,10 @@ body {
   background-size: var(--grid-size) var(--grid-size);
 }
 
-// Code blocks get a solid surface so the grid never crosses monospace text.
-pre {
+// Code blocks and the graph view get a solid surface so the grid never crosses
+// monospace text or competes with the graph's own lines and nodes.
+pre,
+.graph > .graph-outer {
   background-color: var(--light);
 }
 
