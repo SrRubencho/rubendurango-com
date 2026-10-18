@@ -1,4 +1,5 @@
 @use "./base.scss";
+@use "./variables.scss" as *;
 
 // put your custom CSS here!
 
@@ -14,9 +15,52 @@
   background: var(--lightgray);
   box-sizing: border-box;
 
-  @media all and (max-width: 800px) {
+  @media all and ($mobile) {
     width: 96px;
     height: 96px;
     margin-left: 1rem;
   }
+}
+
+// Subtle notebook-grid background across the whole site.
+// Line color derives from the palette (ADR-0007) so it follows light/dark automatically.
+:root {
+  --grid-size: 24px;
+  --grid-line: color-mix(in srgb, var(--gray) 22%, transparent);
+}
+
+:root[saved-theme="dark"] {
+  --grid-line: color-mix(in srgb, var(--gray) 18%, transparent);
+}
+
+body {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+// Code blocks get a solid surface so the grid never crosses monospace text.
+pre {
+  background-color: var(--light);
+}
+
+// Mobile sticky top bar is opaque (content scrolls under it). Extend its fill edge to edge
+// so it reads as a deliberate band, not a hole in the grid. A pseudo-element is used instead of
+// clip-path/backdrop-filter, which would trap the fixed search and explorer overlays inside the bar.
+@media all and ($mobile) {
+  .page > #quartz-body .sidebar.left:has(.explorer)::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(50% - 50vw);
+    background-color: var(--light);
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+
+// The open mobile explorer panel is offset by the page gutter; hide the grid while it is open
+// so the uncovered gutter doesn't show a strip of grid beside the menu.
+html.mobile-no-scroll body {
+  background-image: none;
 }
