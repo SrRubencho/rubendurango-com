@@ -22,29 +22,85 @@
   }
 }
 
-// Subtle notebook-grid background across the whole site.
-// Line color derives from the palette (ADR-0007) so it follows light/dark automatically.
+// Engineering-notebook paper: fine grain, 24px grid with a stronger line every 5 squares,
+// a red double margin beside the text, and (light mode only) a soft vignette.
+// Grid and grain derive from the palette (ADR-0007); every layer is tuned per light/dark.
 :root {
   --grid-size: 24px;
+  --grid-major-size: 120px;
   --grid-line: color-mix(in srgb, var(--gray) 22%, transparent);
+  --grid-major: color-mix(in srgb, var(--gray) 42%, transparent);
+  --margin-line: color-mix(in srgb, #c0392b 45%, transparent);
+  --vignette: radial-gradient(ellipse 75% 75% at 50% 45%, transparent 55%, rgba(94, 63, 0, 0.14));
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2  0 0 0 0 0.15  0 0 0 0 0.05  0 0 0 0.45 -0.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 :root[saved-theme="dark"] {
   --grid-line: color-mix(in srgb, var(--gray) 18%, transparent);
+  --grid-major: color-mix(in srgb, var(--gray) 34%, transparent);
+  --margin-line: color-mix(in srgb, #e06c5a 40%, transparent);
+  --vignette: none;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 0.95  0 0 0 0 0.85  0 0 0 0.45 -0.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 body {
   background-image:
+    var(--grain), linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
+  background-size:
+    180px 180px,
+    var(--grid-major-size) var(--grid-major-size),
+    var(--grid-major-size) var(--grid-major-size),
+    var(--grid-size) var(--grid-size),
+    var(--grid-size) var(--grid-size);
 }
 
-// Code blocks and the graph view get a solid surface so the grid never crosses
-// monospace text or competes with the graph's own lines and nodes.
-pre,
+// Vignette sits behind all content (negative z-index in the root stacking context).
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--vignette);
+  pointer-events: none;
+  z-index: -1;
+}
+
+// Notebook margin: double line just left of the text column. Hidden on mobile,
+// where the gutter is too narrow and the line would sit on the screen edge.
+.page > #quartz-body .center {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1.25rem;
+    width: 3px;
+    border-left: 1px solid var(--margin-line);
+    border-right: 1px solid var(--margin-line);
+    pointer-events: none;
+  }
+
+  @media all and ($mobile) {
+    &::before {
+      display: none;
+    }
+  }
+}
+
+// Code blocks get a solid surface so the grid never crosses monospace text.
+pre {
+  background-color: var(--light);
+}
+
+// The graph view and the mobile top bar keep the paper grain but drop the grid,
+// so they read as the same paper without competing with the graph's own lines.
 .graph > .graph-outer {
   background-color: var(--light);
+  background-image: var(--grain);
 }
 
 // Mobile sticky top bar is opaque (content scrolls under it). Extend its fill edge to edge
@@ -56,6 +112,7 @@ pre,
     position: absolute;
     inset: 0 calc(50% - 50vw);
     background-color: var(--light);
+    background-image: var(--grain);
     z-index: -1;
     pointer-events: none;
   }
