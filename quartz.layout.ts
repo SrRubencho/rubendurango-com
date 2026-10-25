@@ -64,6 +64,8 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.Graph({
         localGraph: {
           depth: -1,
+          repelForce: 1.2,
+          linkDistance: 45,
           fontSize: 0.5,
           opacityScale: 4.75,
           focusOnHover: true,

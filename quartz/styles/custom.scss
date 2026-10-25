@@ -123,3 +123,13 @@ pre {
 html.mobile-no-scroll body {
   background-image: none;
 }
+
+// Home graph shows the whole garden, so give it more room than the per-note local graph.
+// The container must fill the box: the script sizes the canvas from its height (min 250px).
+body[data-slug="index"] .graph > .graph-outer {
+  height: 380px;
+
+  & > .graph-container {
+    height: 100%;
+  }
+}
