@@ -9,6 +9,8 @@ import {
   forceLink,
   forceCollide,
   forceRadial,
+  forceX,
+  forceY,
   zoomIdentity,
   select,
   drag,
@@ -87,6 +89,8 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     showTags,
     focusOnHover,
     enableRadial,
+    maxLabelLength,
+    fitToBox,
   } = JSON.parse(graph.dataset["cfg"]!) as D3Config
 
   const data: Map<SimpleSlug, ContentDetails> = new Map(
@@ -144,7 +148,10 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
   }
 
   const nodes = [...neighbourhood].map((url) => {
-    const text = url.startsWith("tags/") ? "#" + url.substring(5) : (data.get(url)?.title ?? url)
+    let text = url.startsWith("tags/") ? "#" + url.substring(5) : (data.get(url)?.title ?? url)
+    if (maxLabelLength && text.length > maxLabelLength) {
+      text = text.slice(0, maxLabelLength - 1).trimEnd() + "…"
+    }
     return {
       id: url,
       text,
@@ -173,6 +180,14 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
 
   const radius = (Math.min(width, height) / 2) * 0.8
   if (enableRadial) simulation.force("radial", forceRadial(radius).strength(0.2))
+  if (fitToBox) {
+    // Pull every node (including disconnected clusters) toward the middle, more weakly on the
+    // longer axis, so the layout follows the box's shape instead of drifting out of view.
+    const pull = 0.1
+    simulation
+      .force("x", forceX<NodeData>(0).strength((pull * Math.min(width, height)) / width))
+      .force("y", forceY<NodeData>(0).strength((pull * Math.min(width, height)) / height))
+  }
 
   // precompute style prop strings as pixi doesn't support css variables
   const cssVars = [
@@ -378,7 +393,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
       interactive: false,
       eventMode: "none",
       text: n.text,
-      alpha: 0,
+      // Start labels at the opacity the zoom handler gives them at zoom 1, so a high
+      // opacityScale shows labels on load instead of only after zooming (default stays 0).
+      alpha: Math.max((opacityScale - 1) / 3.75, 0),
       anchor: { x: 0.5, y: 1.2 },
       style: {
         fontSize: fontSize * 15,

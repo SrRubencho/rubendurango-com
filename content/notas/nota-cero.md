@@ -1,6 +1,6 @@
 ---
 title: "Nota cero: las decisiones detrás de este jardín"
-tags: [meta]
+tags: [meta, decisiones]
 date: 2026-09-13
 ---
 

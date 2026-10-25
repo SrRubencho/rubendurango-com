@@ -1,6 +1,6 @@
 ---
 title: "La pregunta no es dónde poner IA"
-tags: [ia, valor, decisiones]
+tags: [decisiones, valor, industria]
 date: 2026-10-18
 ---
 Hoy la IA nos da un poder que hace dos años no teníamos. Casi cualquier cosa que se me ocurra se puede construir en unas semanas, a veces en una tarde. Y justo por eso la pregunta difícil cambió: ya no es si se puede, **es si vale la pena**. En el trabajo esa pregunta casi siempre llega disfrazada de otra: "¿dónde podemos poner IA?". Creo que esa es la pregunta equivocada, y esta nota es sobre la que intento hacerme en su lugar.

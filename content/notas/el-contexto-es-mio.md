@@ -1,6 +1,6 @@
 ---
 title: "El modelo cambia, el contexto es mío"
-tags: [ia, contexto, herramientas]
+tags: [contexto, memoria, herramientas, flujo-de-trabajo]
 date: 2026-10-04
 ---
 
