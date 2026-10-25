@@ -1,6 +1,6 @@
 ---
 title: "Optimismo en tiempos de la IA"
-tags: [ia, ensayo]
+tags: [ensayo, futuro]
 date: 2026-09-20
 ---
 Estas semanas han pasado muchas cosas. A comienzos de septiembre un investigador de Anthropic, Jacob Coxon, renunció y salió a decir que la gente que construye la IA cree en serio que esta podría matarnos a todos antes de que termine la década. La noticia le dio la vuelta al mundo, y muchas personas a mi alrededor están nerviosas: ven la IA como una tecnología peligrosa que nadie debería usar. Ahí es donde quiero hacer mi punto.

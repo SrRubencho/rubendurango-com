@@ -1,6 +1,6 @@
 ---
 title: "Cómo estoy aprendiendo"
-tags: [ia, aprendizaje, lectura]
+tags: [aprendizaje, memoria, herramientas, flujo-de-trabajo]
 date: 2026-10-11
 ---
 Encontrar formas de aprender es retador, sobre todo ahora que la IA parece estar volviendo innecesario retener información en la memoria: cualquier dato o habilidad está a un prompt de distancia. Entonces la pregunta se vuelve otra: ¿cómo aprender, de forma que la IA sea una ventaja y parte del proceso? Esta nota es mi bitácora de cómo lo estoy intentando.

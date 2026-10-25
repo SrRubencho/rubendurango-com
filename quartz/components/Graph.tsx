@@ -21,6 +21,8 @@ export interface D3Config {
   enableRadial?: boolean
   // Cut labels longer than this many characters (with an ellipsis). Unset keeps full titles.
   maxLabelLength?: number
+  // Keep the layout inside the box, following its aspect ratio.
+  fitToBox?: boolean
 }
 
 interface GraphOptions {

@@ -9,6 +9,8 @@ import {
   forceLink,
   forceCollide,
   forceRadial,
+  forceX,
+  forceY,
   zoomIdentity,
   select,
   drag,
@@ -88,6 +90,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     focusOnHover,
     enableRadial,
     maxLabelLength,
+    fitToBox,
   } = JSON.parse(graph.dataset["cfg"]!) as D3Config
 
   const data: Map<SimpleSlug, ContentDetails> = new Map(
@@ -177,6 +180,14 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
 
   const radius = (Math.min(width, height) / 2) * 0.8
   if (enableRadial) simulation.force("radial", forceRadial(radius).strength(0.2))
+  if (fitToBox) {
+    // Pull every node (including disconnected clusters) toward the middle, more weakly on the
+    // longer axis, so the layout follows the box's shape instead of drifting out of view.
+    const pull = 0.1
+    simulation
+      .force("x", forceX<NodeData>(0).strength((pull * Math.min(width, height)) / width))
+      .force("y", forceY<NodeData>(0).strength((pull * Math.min(width, height)) / height))
+  }
 
   // precompute style prop strings as pixi doesn't support css variables
   const cssVars = [
