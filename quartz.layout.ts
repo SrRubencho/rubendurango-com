@@ -58,7 +58,25 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [
-    Component.Graph(),
+    // Home shows the whole public garden (every published page and tag) so the graph works as a map.
+    // Notes keep the default local graph (direct neighbours only).
+    Component.ConditionalRender({
+      component: Component.Graph({
+        localGraph: {
+          depth: -1,
+          fontSize: 0.5,
+          opacityScale: 4.75,
+          focusOnHover: true,
+          enableRadial: true,
+          maxLabelLength: 22,
+        },
+      }),
+      condition: (page) => page.fileData.slug === "index",
+    }),
+    Component.ConditionalRender({
+      component: Component.Graph(),
+      condition: (page) => page.fileData.slug !== "index",
+    }),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
   ],

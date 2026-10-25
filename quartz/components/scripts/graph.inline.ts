@@ -87,6 +87,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     showTags,
     focusOnHover,
     enableRadial,
+    maxLabelLength,
   } = JSON.parse(graph.dataset["cfg"]!) as D3Config
 
   const data: Map<SimpleSlug, ContentDetails> = new Map(
@@ -144,7 +145,10 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
   }
 
   const nodes = [...neighbourhood].map((url) => {
-    const text = url.startsWith("tags/") ? "#" + url.substring(5) : (data.get(url)?.title ?? url)
+    let text = url.startsWith("tags/") ? "#" + url.substring(5) : (data.get(url)?.title ?? url)
+    if (maxLabelLength && text.length > maxLabelLength) {
+      text = text.slice(0, maxLabelLength - 1).trimEnd() + "…"
+    }
     return {
       id: url,
       text,
@@ -378,7 +382,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
       interactive: false,
       eventMode: "none",
       text: n.text,
-      alpha: 0,
+      // Start labels at the opacity the zoom handler gives them at zoom 1, so a high
+      // opacityScale shows labels on load instead of only after zooming (default stays 0).
+      alpha: Math.max((opacityScale - 1) / 3.75, 0),
       anchor: { x: 0.5, y: 1.2 },
       style: {
         fontSize: fontSize * 15,

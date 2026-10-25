@@ -19,6 +19,8 @@ export interface D3Config {
   showTags: boolean
   focusOnHover?: boolean
   enableRadial?: boolean
+  // Cut labels longer than this many characters (with an ellipsis). Unset keeps full titles.
+  maxLabelLength?: number
 }
 
 interface GraphOptions {
